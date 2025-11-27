@@ -1,0 +1,10 @@
+[package]
+name = "example"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+senvend-api = { path = "../senvend_api" }
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true
