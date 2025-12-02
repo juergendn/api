@@ -26,6 +26,8 @@ message PayRequest {
 
 /*
  * Starts a payment process on the SENVEND Terminal
+ * Can only be executed after a previous process finished with either PayFailure or PaySuccess.
+ * Will result in a PAY_FAILURE_REASON_PAYMENT_ONGOING or PAY_FAILURE_REASON_INVALID_STATE otherwise.
  */
 message PayStart {
   // The amount to be paid, in cents
@@ -38,6 +40,8 @@ message PayStart {
 /*
  * Cancels an ongoing payment process on the SENVEND Terminal
  * Can also be used to cancel an approved payment (instead of PayGoodsIssued)
+ * Can be sent at any time, but will result in PAY_API_FAILURE_REASON_UUID_NOT_FOUND
+ * if there is nothing to cancel
  */
 message PayCancel {}
 
@@ -84,22 +88,22 @@ message PayResponse {
 }
 
 /*
- * Indicates user has started the payment-process successfully (has enough credit)
+ * Indicates user has started the payment process successfully (has enough credit)
  * Has to be answered with either a PayCancel or a PayGoodsIssued message.
  */
 message PayApproved {}
 
 /*
- * Indicates that the payment was successfuly booked
- * Ends the payment process.
+ * Indicates that the payment was successfully debited
+ * Ends the payment process
  */
 message PaySuccess {}
 
 /*
- * The actual reason a payment process ended in failure
+ * The reason a payment process ended in failure
  */
 enum PayFailureReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   PAY_FAILURE_REASON_UNSPECIFIED = 0;
   // Payment process was cancelled by the user
   PAY_FAILURE_REASON_USER_CANCELLED = 1;
@@ -112,7 +116,7 @@ enum PayFailureReason {
   PAY_FAILURE_REASON_INVALID_STATE = 4;
   // The payment failed (e.g. invalid or broken card, not enough credit etc.)
   PAY_FAILURE_REASON_PAYMENT_FAILED = 5;
-  // The payment process was cancelled via API
+  // The payment process was cancelled by a previous PayCancel message
   PAY_FAILURE_REASON_API_CANCELLED = 6;
 }
 
@@ -130,7 +134,7 @@ message PayFailure {
  * The actual api usage error
  */
 enum PayApiFailureReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   PAY_API_FAILURE_REASON_UNSPECIFIED = 0;
   // The provided payment amount is invalid (e.g. zero)
   PAY_API_FAILURE_REASON_INVALID_AMOUNT = 1;
@@ -155,7 +159,7 @@ message PayApiFailure {
  * The specific reason for an api success message
  */
 enum PayApiSuccessReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   PAY_API_SUCCESS_REASON_UNSPECIFIED = 0;
   // A payment process was successfully started with the given amount
   PAY_API_SUCCESS_REASON_PAYMENT_STARTED = 1;

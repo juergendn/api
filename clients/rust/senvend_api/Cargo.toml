@@ -1,13 +1,22 @@
 [package]
-name = "senvend-api"
+name = "senvend_api"
 version.workspace = true
 edition.workspace = true
+authors.workspace = true
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+categories.workspace = true
+keywords.workspace = true
 
 [lib]
 name = "senvend_api"
 path = "src/lib.rs"
 
 [dependencies]
+senvend_api_macros.workspace = true
+senvend_api_utils.workspace = true
+uuid.workspace = true
 bytes.workspace = true
 prost.workspace = true
 pbjson.workspace = true
@@ -15,6 +24,10 @@ pbjson.workspace = true
 serde.workspace = true
 tonic.workspace = true
 tonic-prost.workspace = true
+
+
+[dev-dependencies]
+uuid = { workspace = true, features = ["v4"] }
 
 [features]
 default = ["proto_full"]
