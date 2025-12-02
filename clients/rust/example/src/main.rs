@@ -1,3 +1,4 @@
+use senvend_api::protos::api::v1::Uuid4;
 use senvend_api::protos::api::v1::{
     AgeApiSuccess, AgeApiSuccessReason, AgeStartRequest, AgeSuccess, PayApiSuccess,
     PayApiSuccessReason, PayApproved, PayGoodsIssued, PayRequest, PayStart, PaySuccess,
@@ -7,6 +8,7 @@ use senvend_api::protos::local::v1::pay_service_client::PayServiceClient;
 use tokio::sync::mpsc;
 use tokio_stream::wrappers::ReceiverStream;
 use tonic::transport::Endpoint;
+use uuid::Uuid;
 
 #[tokio::main]
 async fn main() {
@@ -25,14 +27,14 @@ async fn example_pay(endpoint: Endpoint) -> Result<(), Box<dyn std::error::Error
     let mut client = PayServiceClient::connect(endpoint).await?;
     println!("PayService connected!");
 
-    // TODO:add encode uuid helper
-    // let pay_uuid = uuid
+    let pay_uuid = Uuid::new_v4();
+    let pay_uuid_proto = Uuid4::try_from(pay_uuid).expect("Failed to convert UUID");
 
     let (tx, rx) = mpsc::channel::<PayRequest>(8);
     let outbound = ReceiverStream::new(rx);
 
     let pay_start = PayRequest {
-        id: None,
+        id: Some(pay_uuid_proto),
         request: Some(Request::Start(PayStart {
             amount: 100,
             age_verification: Some(AgeStartRequest { min_age: 18 }),

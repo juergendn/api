@@ -6,7 +6,7 @@ import "api/v1/common.proto";
 
 /*
  * All messages sent from the integrator/VMC to the SENVEND Terminal to manage age verification.
- * A age verification process must be started with the StartAgeRequest message.
+ * An age verification process must be started with the StartAgeRequest message.
  */
 message AgeRequest {
   // Unique identifier for this age verification request. Can be used for tracing and correlating requests and responses.
@@ -64,7 +64,7 @@ message AgeSuccess {}
  * The actual reason (other than underage) why an age verification process failed.
  */
 enum AgeFailureReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   AGE_FAILURE_REASON_UNSPECIFIED = 0;
   // Verification process was cancelled by the user
   AGE_FAILURE_REASON_USER_CANCELLED = 1;
@@ -75,7 +75,7 @@ enum AgeFailureReason {
   // The system is in an invalid state to perform age verification
   // (f.e. another verification or a payment is in progress)
   AGE_FAILURE_REASON_INVALID_STATE = 4;
-  // The verification process was cancelled via API
+  // The verification process was cancelled by a previous AgeCancelRequest message
   AGE_FAILURE_REASON_API_CANCELLED = 5;
 }
 
@@ -104,7 +104,7 @@ message AgeFailure {
  * The actual api usage error
  */
 enum AgeApiFailureReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   AGE_API_FAILURE_REASON_UNSPECIFIED = 0;
   // The provided minAge is invalid (e.g. zero)
   AGE_API_FAILURE_REASON_INVALID_AGE = 1;
@@ -127,7 +127,7 @@ message AgeApiFailure {
  * The specific reason for an api success message
  */
 enum AgeApiSuccessReason {
-  // Unspecified reason
+  // Unspecified reason, should not be used
   AGE_API_SUCCESS_REASON_UNSPECIFIED = 0;
   // A verification process was successfully started with the given amount
   AGE_API_SUCCESS_REASON_VERIFICATION_STARTED = 1;

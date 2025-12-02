@@ -19,6 +19,5 @@ See [install-protoc-plugins.sh](./install-protoc-plugins.sh) for more details.
 Ensure buf.build cli is installed. See [installation instructions](https://buf.build/docs/cli/installation/).
 
 ```bash
-./install-protoc-plugins.sh
-buf generate
+./gen.sh
 ```
