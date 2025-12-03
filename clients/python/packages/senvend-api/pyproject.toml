@@ -3,7 +3,7 @@ name = "senvend-api"
 version = "0.0.1"
 description = "Public APIs to interact with the SENVEND ecosystem"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = ["betterproto2>=0.9.1"]
 
 [project.optional-dependencies]
@@ -14,5 +14,5 @@ grpcio = ["grpcio>=1.76.0"]
 "src/senvend_api/**" = ["E402"]
 
 [build-system]
-requires = ["uv_build>=0.9.14,<0.10.0"]
-build-backend = "uv_build"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

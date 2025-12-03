@@ -58,6 +58,12 @@ async def perform_payment(amount_cents: int, min_age: int = None):
                     pay_start.age_verification.CopyFrom(
                         pay_pb2.AgeStartRequest(min_age=min_age)
                     )
+                
+                broadcast_update({
+                    'type': 'info',
+                    'message': f'➡️ Sende PayStart: {amount_cents/100:.2f} EUR' + (f' (Alter ≥{min_age})' if min_age else ''),
+                    'timestamp': datetime.now().isoformat()
+                })
                 yield pay_pb2.PayRequest(start=pay_start)
                 
                 while True:
@@ -103,6 +109,17 @@ async def perform_payment(amount_cents: int, min_age: int = None):
                     await request_queue.put(None)
                     return False
                 
+                elif result_type == 'age_api_failure':
+                    reason = response.age_api_failure.reason
+                    reason_name = pay_pb2.AgeApiFailureReason.Name(reason)
+                    broadcast_update({
+                        'type': 'error',
+                        'message': f'Altersverifikation API Fehler: {reason_name}',
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    await request_queue.put(None)
+                    return False
+                
                 elif result_type == 'api_success':
                     reason = response.api_success.reason
                     if reason == pay_pb2.PAY_API_SUCCESS_REASON_PAYMENT_STARTED:
@@ -121,14 +138,14 @@ async def perform_payment(amount_cents: int, min_age: int = None):
                 elif result_type == 'approved':
                     broadcast_update({
                         'type': 'success',
-                        'message': 'Zahlung genehmigt! Karte hat genug Guthaben.',
+                        'message': '✅ Zahlung genehmigt! Karte hat genug Guthaben.',
                         'timestamp': datetime.now().isoformat()
                     })
                     payment_approved = True
                     
                     broadcast_update({
                         'type': 'info',
-                        'message': 'Sende GoodsIssued (Waren ausgegeben)',
+                        'message': '➡️ Sende PayGoodsIssued (Waren ausgegeben)',
                         'timestamp': datetime.now().isoformat()
                     })
                     
