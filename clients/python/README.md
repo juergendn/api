@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SENVEND Kartenleser API - Python Test Client
 
 Dieses Verzeichnis enthält Python-Test-Programme für die SENVEND Kartenleser API.
@@ -138,10 +137,3 @@ python test_imports.py
 
 Ergebnis: ✅ ERFOLG
 ```
-=======
-# SENVEND Python API
-
-## example code
-
-Take a look at [packages/example](./packages/example/) for a simple example of how to use the SENVEND Python API.
->>>>>>> 66ea39dee573b02a335a6bbfccc08d39c77d063f

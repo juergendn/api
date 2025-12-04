@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENVEND Kartenleser Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💳 SENVEND Kartenleser Test</h1>
+            <p class="subtitle">Web-Interface für Zahlungstests</p>
+        </header>
+
+        <!-- Konfiguration -->
+        <section class="config-section">
+            <h2>🔧 Terminal-Konfiguration</h2>
+            <div class="config-form">
+                <div class="form-group">
+                    <label for="terminal-ip">Terminal IP-Adresse:</label>
+                    <input type="text" id="terminal-ip" placeholder="192.168.1.100" value="127.0.0.1">
+                </div>
+                <div class="form-group">
+                    <label for="terminal-port">Port:</label>
+                    <input type="number" id="terminal-port" placeholder="11111" value="11111">
+                </div>
+                <button onclick="saveConfig()" class="btn btn-primary">Konfiguration speichern</button>
+            </div>
+            <div id="config-status" class="status-message"></div>
+        </section>
+
+        <!-- Schnelltests -->
+        <section class="tests-section">
+            <h2>🧪 Schnelltests</h2>
+            <div class="test-buttons">
+                <button onclick="runTest(100)" class="btn btn-test">
+                    💰 1.00 EUR
+                    <span class="test-desc">Einfache Zahlung</span>
+                </button>
+                <button onclick="runTest(250)" class="btn btn-test">
+                    💰 2.50 EUR
+                    <span class="test-desc">Mittlerer Betrag</span>
+                </button>
+                <button onclick="runTest(500)" class="btn btn-test">
+                    💰 5.00 EUR
+                    <span class="test-desc">Höherer Betrag</span>
+                </button>
+                <button onclick="runTest(150, 18)" class="btn btn-test btn-age">
+                    🔞 1.50 EUR + 18+
+                    <span class="test-desc">Mit Altersverifikation</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Benutzerdefinierter Test -->
+        <section class="custom-test-section">
+            <h2>⚙️ Benutzerdefinierter Test</h2>
+            <div class="custom-form">
+                <div class="form-group">
+                    <label for="custom-amount">Betrag (in Cent):</label>
+                    <input type="number" id="custom-amount" placeholder="100" min="1" value="100">
+                    <span class="help-text">100 Cent = 1.00 EUR</span>
+                </div>
+                <div class="form-group">
+                    <label for="custom-age">
+                        <input type="checkbox" id="age-check"> Altersverifikation
+                    </label>
+                    <input type="number" id="custom-age" placeholder="18" min="0" max="99" value="18" disabled>
+                    <span class="help-text">Mindestalter</span>
+                </div>
+                <button onclick="runCustomTest()" class="btn btn-primary">Test starten</button>
+            </div>
+        </section>
+
+        <!-- Live-Log -->
+        <section class="log-section">
+            <div class="log-header">
+                <h2>📋 Live-Log</h2>
+                <button onclick="clearLog()" class="btn btn-small">Log leeren</button>
+            </div>
+            <div id="log" class="log-container"></div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
